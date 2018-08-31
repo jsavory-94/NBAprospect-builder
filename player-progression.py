@@ -33,33 +33,41 @@ class Player:
         growth_end_age = 20
         
         #define growth rates
-        potential_mental_growthRate = 0.33 * (self.traits['mental drive']*0.01)
-        actual_mental_growthRate = potential_mental_growthRate * (self.traits['mental discipline']*0.01)
+        potential_mental_growthRate = 0.33 * (self.traits['game instinct']*0.01)
+        actual_mental_growthRate = potential_mental_growthRate * random.uniform((self.traits['mental discipline']*0.01),1)
         
         potential_physical_growthRate = 0.09 * (self.traits['physical hardiness']*0.01)
-        actual_physical_growthRate = potential_physical_growthRate * (self.traits['training discipline']*0.01)
+        actual_physical_growthRate = potential_physical_growthRate * random.uniform((self.traits['training discipline']*0.01),1)
 
         #apply growth
-        if self.age < growth_end_age:
-            self.bball_skill_IQ['offensive awareness'] = self.bball_skill_IQ['offensive awareness'] * (1 + actual_mental_growthRate)
-            self.bball_skill_IQ['defensive awareness'] = self.bball_skill_IQ['defensive awareness'] * (1 + actual_mental_growthRate)
+        if self.age <= growth_end_age:
+            self.bball_skill_IQ['offensive awareness'] += (99 - self.bball_skill_IQ['offensive awareness'])* (actual_mental_growthRate)
+            self.bball_skill_IQ['defensive awareness'] += (99 - self.bball_skill_IQ['defensive awareness']) * (actual_mental_growthRate)
+            self.bball_skill_athleticism['strength'] += (99 - self.bball_skill_athleticism['strength']) * (actual_physical_growthRate)
+            
             if self.position == 'PF' or 'C':
-                self.bball_skill_IQ['screen setting'] = self.bball_skill_IQ['screen setting'] * (1 + actual_mental_growthRate)
+                self.bball_skill_IQ['screen setting'] += (99 - self.bball_skill_IQ['screen setting']) * (actual_mental_growthRate)
             elif self.position == 'PG' or 'SG':
-                self.bball_skill_IQ['screen using'] = self.bball_skill_IQ['screen using'] * (1 + actual_mental_growthRate)
+                self.bball_skill_IQ['screen using'] += (99 - self.bball_skill_IQ['screen using']) * (actual_mental_growthRate)               
             else:
-                False
-            self.bball_skill_athleticism['strength'] = self.bball_skill_athleticism['strength'] * (1 + actual_physical_growthRate)
-
+                False            
         else:
             False
 
+    #def early20s_grower(self):
+    #   growth_end_age = 25
+#
+    #   #define growth rates
+    #   potential_mental_growthRate = 0.33 * (self.traits['game instinct']*0.01)
+    #   actual_mental_growthRate = potential_mental_growthRate * (self.traits['mental discipline']*0.01)
 
-#   1.2 --Create Individual Players--
+
+
+#   1.2 --Create Instances of Player--
 
 #   1.2.1 --Define attributes--
-def trait_inputter(mental_drive, mental_disc, phys_hard, train_disc):
-    return {'mental drive': mental_drive, 'mental discipline': mental_disc, 'physical hardiness': phys_hard, 'training discipline': train_disc}
+def trait_inputter(bruce_lee, mental_disc, phys_hard, train_disc):
+    return {'game instinct': bruce_lee, 'mental discipline': mental_disc, 'physical hardiness': phys_hard, 'training discipline': train_disc}
 
 def skill_inside_inputter(stlayup, hook, dunk, shot_close, blk, offreb, defreb):
     return {'standing layup': stlayup, 'hook shot': hook, 'dunk': dunk, 'shot blocking': blk, 'offensive rebound': offreb, 'defensive rebound': defreb}
@@ -67,20 +75,20 @@ def skill_inside_inputter(stlayup, hook, dunk, shot_close, blk, offreb, defreb):
 def skill_outside_inputter(mid, three, fade, stl):
     return {'shot mid': mid, 'shot three': three, 'post fade': fade, 'steal': stl}
 
-def skill_control_inputter(handles, dish, dext, post_off, post_def, peri_def,):
-    return {'ball handling': handles, 'passing': dish, 'dexterity': dext, 'post offense': post_off, 'perimeter defense': peri_def }
+def skill_control_inputter(handles, dish, dext, comp, post_off, post_def, peri_def):
+    return {'ball handling': handles, 'passing': dish, 'dexterity': dext, 'composure':comp, 'post offense': post_off, 'perimeter defense': peri_def }
 
-def skill_IQ_inputter(pick_set, pick_read, off_aware, def_aware):
-    return {'screen setting': pick_set, 'screen using': pick_read, 'offensive awareness': off_aware, 'defensive awareness': def_aware}
+def skill_IQ_inputter(screen_set, screen_use, off_aware, def_aware):
+    return {'screen setting': screen_set, 'screen using': screen_use, 'offensive awareness': off_aware, 'defensive awareness': def_aware}
 
 def skill_athleticism_inputter(speed, strength, accel, jump, stamina):
     return {'speed': speed, 'strength': strength, 'acceleration': accel, 'jumping':jump, 'stamina':stamina}
 
 
-#   1.2.2 --Actually create players--
+#   1.2.2 --Create players--
 player1 = Player('Dwayne "The Low Block" Johnson', 18, 'PF', trait_inputter(95,90,95,99), 76, 260, 77, 
                 skill_inside_inputter(82, 67, 50, 70, 65, 90, 88), skill_outside_inputter(66,60,55,70), 
-                skill_control_inputter(50,70,75,60,80,70), skill_IQ_inputter(90, 25, 60, 85), 
+                skill_control_inputter(50,70,75,60,55,80,70), skill_IQ_inputter(66, 25, 70, 85), 
                 skill_athleticism_inputter(60,95,65,65,88))
 
 #print(player1.bball_skill_athleticism)
@@ -89,12 +97,20 @@ player1 = Player('Dwayne "The Low Block" Johnson', 18, 'PF', trait_inputter(95,9
 
 #2.---SIMULATE SEASONS---
 
-seasons = 0
+print(f'On draft day {player1.name} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.bball_skill_IQ['offensive awareness']))))
 
-while seasons <10:
+season = 0
+printcounter = 0
+
+while season <=10:
+    
+    if printcounter == 1:
+        print(f'After season {season}, {player1.name} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.bball_skill_IQ['offensive awareness']))))
+        printcounter = 0
+
     player1.player_ager()
     player1.teen_grower()
-    seasons+=1
+        
+    printcounter+=1
+    season+=1
 
-
-print(player1.bball_skill_IQ['screen setting'])
