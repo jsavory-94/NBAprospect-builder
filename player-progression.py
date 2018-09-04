@@ -4,61 +4,75 @@ import random
 
 #   1.1 --Create Player Class--
 class Player:
-    def __init__ (self, name, age, position, traits, height, weight, wingspan, 
-    bball_skill_inside, bball_skill_outside, bball_skill_control, bball_skill_IQ, bball_skill_athleticism):
+    def __init__ (self, vitals, measurements, traits,
+    threepoint_scoring, midrange_scoring, close_scoring, scoring_instincts, free_throw, driving_finesse,
+    driving_strong, onballD_perimeter, onballD_post, team_defense, stealing, shot_defense, shot_blocking, rebounding,
+    ball_handling, passing, post_control, lowpost_strong, lowpost_finesse, highpost_finesse, athleticism, years_pro):
+        
         #Bio
-        self.name = name
-        self.age = age
-        self.position = position
+        self.vitals = vitals
+        self.measurements = measurements
         self.traits = traits
 
-        #Physical
-        self.height = height
-        self.weight = weight 
-        self.wingspan = wingspan
-
         #Skillz
-        self.bball_skill_inside = bball_skill_inside
-        self.bball_skill_outside = bball_skill_outside
-        self.bball_skill_control = bball_skill_control
-        self.bball_skill_IQ = bball_skill_IQ
-        self.bball_skill_athleticism = bball_skill_athleticism
+        self.threepoint_scoring = threepoint_scoring
+        self.midrange_scoring = midrange_scoring
+        self.close_scoring = close_scoring
+        self.scoring_instincts = scoring_instincts
+        self.free_throw = free_throw
+        self.driving_finesse = driving_finesse
+        self.driving_strong = driving_strong
+        self.onballD_perimeter = onballD_perimeter
+        self.onballD_post = onballD_post
+        self.team_defense = team_defense
+        self.stealing = stealing
+        self.shot_defense = shot_defense
+        self.shot_blocking = shot_blocking
+        self.rebounding = rebounding
+        self.ball_handling = ball_handling
+        self.passing = passing
+        self.post_control = post_control
+        self.lowpost_strong = lowpost_strong
+        self.lowpost_finesse = lowpost_finesse
+        self.highpost_finesse = highpost_finesse
+        self.athleticism = athleticism
 
+        #Status
+        self.years_pro = years_pro
 
     def player_ager(self):
-        self.age +=1
-    
+        self.vitals['Age'] +=1
+        self.years_pro +=1
     
     def teen_grower(self):
         growth_end_age = 20
         
         #define growth rates
-        potential_mental_growthRate = 0.33 * (self.traits['game instinct']*0.01)
-        actual_mental_growthRate = potential_mental_growthRate * random.uniform((self.traits['mental discipline']*0.01),1)
+        potential_mental_growthRate = 0.33 * (self.traits['talent']*0.01)
+        actual_mental_growthRate = potential_mental_growthRate * random.uniform((self.traits['training discipline (mental)']*0.01),1)
         
         potential_physical_growthRate = 0.09 * (self.traits['physical hardiness']*0.01)
-        actual_physical_growthRate = potential_physical_growthRate * random.uniform((self.traits['training discipline']*0.01),1)
+        actual_physical_growthRate = potential_physical_growthRate * random.uniform((self.traits['training discipline (physical)']*0.01),1)
 
         #apply growth
-        if self.age <= growth_end_age:
-            self.bball_skill_IQ['offensive awareness'] += (99 - self.bball_skill_IQ['offensive awareness'])* (actual_mental_growthRate)
-            self.bball_skill_IQ['defensive awareness'] += (99 - self.bball_skill_IQ['defensive awareness']) * (actual_mental_growthRate)
-            self.bball_skill_athleticism['strength'] += (99 - self.bball_skill_athleticism['strength']) * (actual_physical_growthRate)
+        #if self.vitals['age'] <= growth_end_age:
+         #   self.skill_IQ['offensive awareness'] += (99 - self.skill_IQ['offensive awareness'])* (actual_mental_growthRate)
+          #  self.skill_athleticism['strength'] += (99 - self.skill_athleticism['strength']) * (actual_physical_growthRate)
             
-            if self.position == 'PF' or 'C':
-                self.bball_skill_IQ['screen setting'] += (99 - self.bball_skill_IQ['screen setting']) * (actual_mental_growthRate)
-            elif self.position == 'PG' or 'SG':
-                self.bball_skill_IQ['screen using'] += (99 - self.bball_skill_IQ['screen using']) * (actual_mental_growthRate)               
-            else:
-                False            
-        else:
-            False
+            #if self..vitals['position'] == 'PF' or 'C':
+            #    self.skill_IQ['screen setting'] += (99 - self.skill_IQ['screen setting']) * (actual_mental_growthRate)
+            #elif self.position == 'PG' or 'SG':
+            #    self.skill_IQ['screen using'] += (99 - self.skill_IQ['screen using']) * (actual_mental_growthRate)               
+            #else:
+            #    False            
+        #else:
+        #    False
 
     #def early20s_grower(self):
     #   growth_end_age = 25
 #
     #   #define growth rates
-    #   potential_mental_growthRate = 0.33 * (self.traits['game instinct']*0.01)
+    #   potential_mental_growthRate = 0.33 * (self.traits['talent']*0.01)
     #   actual_mental_growthRate = potential_mental_growthRate * (self.traits['mental discipline']*0.01)
 
 
@@ -66,38 +80,188 @@ class Player:
 #   1.2 --Create Instances of Player--
 
 #   1.2.1 --Define attributes--
-def trait_inputter(bruce_lee, mental_disc, phys_hard, train_disc):
-    return {'game instinct': bruce_lee, 'mental discipline': mental_disc, 'physical hardiness': phys_hard, 'training discipline': train_disc}
+def vital_function(name, age, position):
+    return {'Name': name, 'Age':age, 'Position': position}
 
-def skill_inside_inputter(stlayup, hook, dunk, shot_close, blk, offreb, defreb):
-    return {'standing layup': stlayup, 'hook shot': hook, 'dunk': dunk, 'shot blocking': blk, 'offensive rebound': offreb, 'defensive rebound': defreb}
+def measurement_function(height, weight, wingspan):
+    return {'Height (inches)': height, 'Weight':weight, 'Wingspan': wingspan}
 
-def skill_outside_inputter(mid, three, fade, stl):
-    return {'shot mid': mid, 'shot three': three, 'post fade': fade, 'steal': stl}
+def trait_function(talent, drive, mental_disc, phys_hard, phys_disc):
+    return {'talent': talent, 'drive': drive, 'training discipline (mental)': mental_disc, 'physical hardiness': phys_hard, 'training discipline (physical)': phys_disc}
 
-def skill_control_inputter(handles, dish, dext, comp, post_off, post_def, peri_def):
-    return {'ball handling': handles, 'passing': dish, 'dexterity': dext, 'composure':comp, 'post offense': post_off, 'perimeter defense': peri_def }
+def threepoint_scoring_function(open_3, offdribble_3, contested_3):
+    return {'Open shot 3pt': open_3, 'Off dribble shot 3pt': offdribble_3, 'Contested shot 3pt': contested_3}
 
-def skill_IQ_inputter(screen_set, screen_use, off_aware, def_aware):
-    return {'screen setting': screen_set, 'screen using': screen_use, 'offensive awareness': off_aware, 'defensive awareness': def_aware}
+def midrange_scoring_function(open_mid, offdribble_mid, contested_mid):
+    return {'Open shot midrange': open_mid, 'Off dribble shot midrange': offdribble_mid, 'Contested shot midrange': contested_mid}
 
-def skill_athleticism_inputter(speed, strength, accel, jump, stamina):
-    return {'speed': speed, 'strength': strength, 'acceleration': accel, 'jumping':jump, 'stamina':stamina}
+def closerange_scoring_function(open_close, offdribble_close, contested_close):
+    return {'Open shot closerange': open_close, 'Off dribble shot closerange': offdribble_close, 'Contested shot closerange': contested_close}
+
+def scoring_instincts_function(shot_IQ, draw_foul, off_consistency):
+    return {'Shot IQ': shot_IQ, 'Draw foul':draw_foul, 'Offensive consistency': off_consistency}
+
+def free_throw_function(free_throw):
+    return {'Free throw': free_throw}
+
+def driving_finesse_function(driving_layup):
+    return {'Driving layup': driving_layup}
+
+def driving_strong_function(driving_dunk):
+    return {'Driving dunk': driving_dunk}
+
+def onballD_perimeter_function(onball_D, lat_quick):
+    return {'On ball defense IQ': onball_D, 'Lateral quickness': lat_quick}
+
+def onballD_post_function(post_D):
+    return {'Post defense': post_D}
+
+def team_defense_function(PnR_def_IQ, help_def_IQ, def_consistency):
+    return {'Pick and roll defense IQ': PnR_def_IQ, 'Help defense IQ': help_def_IQ, 'Defensive consistency': def_consistency}
+
+def stealing_function(steal, pass_percept, rxn_time):
+    return {'Steal': steal, 'Pass perception': pass_percept, 'Reaction time': rxn_time}
+
+def shot_defense_function(shot_contest):
+    return {'Shot contest': shot_contest}
+
+def shot_blocking_function(shot_block):
+    return {'Shot blocking': shot_block}
+
+def rebounding_function(off_reb, def_reb, boxout):
+    return {'Offensive rebound': off_reb, 'Defensive rebound': def_reb, 'Boxout': boxout}
+
+def ball_handling_function(ball_control, speed_w_ball):
+    return {'Ball control': ball_control, 'Speed with ball': speed_w_ball}
+
+def passing_function(pass_accuracy, pass_IQ, pass_vision):
+    return {'Pass accuracy': pass_accuracy, 'Passing IQ': pass_IQ, 'Passing vision': pass_vision}
+
+def post_control_function(post_control, hands):
+    return {'Post control': post_control, 'Hands': hands}
+
+def lowpost_strong_function(stand_dunk, contact_dunk):
+    return {'Standing dunk': stand_dunk, 'Contact dunk':contact_dunk}
+
+def lowpost_finesse_function(stand_layup, hook):
+    return {'Standing layup': stand_layup, 'Post hook': hook}
+
+def highpost_finesse_function(post_fade):
+    return {'Post fadeaway':post_fade}
+
+def athleticism_function(speed, accel, vert, strength, stamina, hustle, durability):
+    return {'Speed': speed, 'Acceleration': accel, 'Vertical': vert, 'Strength': strength, 'Stamina':stamina, 'Hustle': hustle, 'Durability': durability}
 
 
 #   1.2.2 --Create players--
-player1 = Player('Dwayne "The Low Block" Johnson', 18, 'PF', trait_inputter(95,90,95,99), 76, 260, 77, 
-                skill_inside_inputter(82, 67, 50, 70, 65, 90, 88), skill_outside_inputter(66,60,55,70), 
-                skill_control_inputter(50,70,75,60,55,80,70), skill_IQ_inputter(66, 25, 70, 85), 
-                skill_athleticism_inputter(60,95,65,65,88))
 
-#print(player1.bball_skill_athleticism)
+#Take user inputs
+vital_input_name = input('Enter your player\'s name: ')
+vital_input_age = input('Enter your player\'s age: ')
+vital_input_position = input('Enter your player\'s position: ')
+
+measurement_input_height = input('Enter your player\'s height: ')
+measurement_input_weight = input('Enter your player\'s weight: ')
+measurement_input_wingspan = input('Enter your player\'s wingspan: ')
+
+trait_input_talent = input('Enter your player\'s talent: ')
+trait_input_drive = input('Enter your player\'s drive: ')
+trait_input_mentalDiscipline = input('Enter your player\'s training discipline (mental): ')
+trait_input_physHard = input('Enter your player\'s physical hardiness: ')
+trait_input_physDisc = input('Enter your player\'s training discipline (physical): ')
+
+threepoint_input_scoring_open = input('Enter your player\'s Open Shot 3pt rating: ')
+threepoint_input_scoring_offDribble = input('Enter your player\'s Off-dribble Shot 3pt rating: ')
+threepoint_input_scoring_contested = input('Enter your player\'s Contested Shot 3pt rating: ')
+
+midrange_input_scoring_open = input('Enter your player\'s Open Shot Midrange rating: ')
+midrange_input_scoring_offDribble = input('Enter your player\'s Off-dribble Shot Midrange rating: ')
+midrange_input_scoring_contested = input('Enter your player\'s Contested Shot Midrange rating: ')
+
+close_input_scoring_open = input('Enter your player\'s Open Shot Close rating: ')
+close_input_scoring_offDribble = input('Enter your player\'s Off-dribble Shot Close rating: ')
+close_input_scoring_contested = input('Enter your player\'s Contested Shot Close rating: ')
+
+scoring_instincts_input_shotIQ = input('Enter your player\'s Shot IQ rating: ')
+scoring_instincts_input_drawFoul = input('Enter your player\'s draw foul rating: ')
+scoring_instincts_input_offconsistency = input ('Enter your player\'s offensive consistency rating: ')
+
+free_throw_input = input('Enter your player\'s free throw rating: ')
+
+driving_finesse_input_drivinglayup = input('Enter your player\'s driving layup rating: ')
+
+driving_strong_input_drivedunk = input('Enter your player\'s driving dunk rating: ')
+
+onballD_perimeter_input_IQ = input('Enter your player\'s on ball defense IQ rating: ')
+onballD_perimeter_input_latquick = input('Enter your player\'s lateral quickness rating: ')
+onballD_post_input = input('Enter your player\'s post defense rating: ')
+
+team_defense_input_PnR = input('Enter your player\'s pick and roll defense IQ rating: ')
+team_defense_input_help = input('Enter your player\'s help defense IQ rating: ')
+team_defense_input_consist = input('Enter your player\'s defensive consistency rating: ')
+
+steal_input_stl = input('Enter your player\'s steal rating: ')
+steal_input_passPercept = input('Enter your player\'s pass perception rating: ')
+steal_input_rxn = input('Enter your player\'s reaction time rating: ')
+shotContest_input = input('Enter your player\'s shot contest rating: ')
+shotBlock_input = input('Enter your player\'s shot block rating: ')
+
+rebounding_input_off = input('Enter your player\'s offensive rebounding rating: ')
+rebounding_input_def = input('Enter your player\'s defensive rebounding rating: ')
+rebounding_input_box = input('Enter your player\'s boxout rating: ')
+
+ball_handling_input_control = input('Enter your player\'s ball control rating: ')
+ball_handling_input_speed = input('Enter your player\'s speed with ball rating: ')
+
+passing_input_accuracy = input('Enter your player\'s passing accuracy rating: ')
+passing_input_IQ = input('Enter your player\'s passing IQ rating: ')
+passing_input_vision = input('Enter your player\'s passing vision rating: ') 
+
+post_input_control = input('Enter your player\'s post control rating: ')
+post_input_hands = input('Enter your player\'s hands rating: ')
+
+lowpost_strong_input_standDunk = input('Enter your player\'s standing dunk rating: ')
+lowpost_strong_input_contactDunk = input('Enter your player\'s contact dunk rating: ')
+
+lowpost_finesse_input_standLayup = input('Enter your player\'s standing layup rating: ')
+lowpost_finesse_input_hook = input('Enter your player\'s post hook rating: ')
+
+highpost_finesse_input_fade = input('Enter your player\'s post fadeaway rating: ')
+
+athleticism_input_speed = input('Enter your player\'s speed rating: ')
+athleticism_input_accel = input('Enter your player\'s acceleration rating: ')
+athleticism_input_vertical = input('Enter your player\'s vertical rating: ')
+athleticism_input_strength = input('Enter your player\'s strength rating: ')
+athleticism_input_stamina = input('Enter your player\'s stamina rating: ')
+athleticism_input_hustle = input('Enter your player\'s hustle rating: ')
+athleticism_input_durable = input('Enter your player\'s durability rating: ')
+
+#Create player
+player1 = Player(vital_function(vital_input_name, vital_input_age, vital_input_position), 
+    measurement_function(measurement_input_height, measurement_input_weight, measurement_input_wingspan), 
+    trait_function(trait_input_talent, trait_input_drive, trait_input_mentalDiscipline,trait_input_physHard,trait_input_physDisc), 
+    threepoint_scoring_function(threepoint_input_scoring_open, threepoint_input_scoring_offDribble, threepoint_input_scoring_contested), 
+    midrange_scoring_function(midrange_input_scoring_open, midrange_input_scoring_offDribble, midrange_input_scoring_contested),
+    closerange_scoring_function(close_input_scoring_open, close_input_scoring_offDribble, close_input_scoring_contested), 
+    scoring_instincts_function(scoring_instincts_input_shotIQ, scoring_instincts_input_drawFoul, scoring_instincts_input_offconsistency), 
+    free_throw_function(free_throw_input), driving_finesse_function(driving_finesse_input_drivinglayup),
+    driving_strong_function(driving_strong_input_drivedunk), onballD_perimeter_function(onballD_perimeter_input_IQ, onballD_perimeter_input_latquick),
+    onballD_post_function(onballD_post_input), team_defense_function(team_defense_input_PnR, team_defense_input_help, team_defense_input_consist),
+    stealing_function(steal_input_stl, steal_input_passPercept, steal_input_rxn), shot_defense_function(shotContest_input),
+    shot_blocking_function(shotBlock_input), rebounding_function(rebounding_input_off,rebounding_input_def, rebounding_input_box),
+    ball_handling_function(ball_handling_input_control, ball_handling_input_speed), passing_function(passing_input_accuracy, passing_input_IQ, passing_input_vision),
+    post_control_function(post_input_control, post_input_hands), lowpost_strong_function(lowpost_strong_input_standDunk, lowpost_strong_input_contactDunk),
+    lowpost_finesse_function(lowpost_finesse_input_standLayup, lowpost_finesse_input_hook), highpost_finesse_function(highpost_finesse_input_fade), 
+    athleticism_function(athleticism_input_speed, athleticism_input_accel, athleticism_input_vertical, athleticism_input_strength, athleticism_input_stamina, athleticism_input_hustle, athleticism_input_durable),0
+    )
 
 
 
 #2.---SIMULATE SEASONS---
 
-print(f'On draft day {player1.name} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.bball_skill_IQ['offensive awareness']))))
+#print(f'On draft day {player1.vitals['Name']} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.skill_IQ['offensive awareness']))))
+print('On draft day ' + str({player1.vitals['Name']}) + ' exists. He has ' + str({player1.shot_blocking['Shot blocking']}) + 'block rating.')
+
 
 season = 0
 printcounter = 0
@@ -105,11 +269,12 @@ printcounter = 0
 while season <=10:
     
     if printcounter == 1:
-        print(f'After season {season}, {player1.name} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.bball_skill_IQ['offensive awareness']))))
+    #    print(f'After season {season}, {player1.vitals['Name']} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.skill_IQ['offensive awareness']))))
+        print('player age: ' + str(player1.vitals['Age']))
         printcounter = 0
-
-    player1.player_ager()
-    player1.teen_grower()
+    
+    #player1.player_ager()
+    #player1.teen_grower()
         
     printcounter+=1
     season+=1
