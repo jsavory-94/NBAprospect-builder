@@ -1,13 +1,14 @@
 import random
+import statistics
 
 #1.---CREATE PLAYER---
 
 #   1.1 --Create Player Class--
 class Player:
     def __init__ (self, vitals, measurements, traits,
-    threepoint_scoring, midrange_scoring, close_scoring, scoring_instincts, free_throw, driving_finesse,
+    threepoint_spotup, threepoint_creating, midrange_scoring, close_scoring, scoring_instincts, free_throw, driving_finesse,
     driving_strong, onballD_perimeter, onballD_post, team_defense, stealing, shot_defense, shot_blocking, rebounding,
-    ball_handling, passing, post_control, lowpost_strong, lowpost_finesse, highpost, athleticism, years_pro, years_pro_after20):
+    ball_handling, passing, post_control, lowpost_strong, lowpost_finesse, highpost, athleticism, years_pro, nonteen_yearsPro):
         
         #Bio
         self.vitals = vitals
@@ -15,7 +16,8 @@ class Player:
         self.traits = traits
 
         #Skillz
-        self.threepoint_scoring = threepoint_scoring
+        self.threepoint_spotup = threepoint_spotup
+        self.threepoint_creating = threepoint_creating
         self.midrange_scoring = midrange_scoring
         self.close_scoring = close_scoring
         self.scoring_instincts = scoring_instincts
@@ -39,11 +41,14 @@ class Player:
 
         #Status
         self.years_pro = years_pro
-        self.years_pro_after20 = years_pro_after20
+        self.nonteen_yearsPro = nonteen_yearsPro
 
     def player_ager(self):
         self.vitals['Age'] +=1
         self.years_pro +=1
+        if self.vitals['Age'] > 20:
+            self.nonteen_yearsPro +=1
+
     
     def teen_grower(self):
         growth_end_age = 20
@@ -58,22 +63,90 @@ class Player:
         #apply growth
         if self.vitals['Age'] <= growth_end_age:
             self.scoring_instincts['Offensive consistency'] += (99 - self.scoring_instincts['Offensive consistency'])* actual_mental_growthRate
+            self.scoring_instincts['Offensive consistency'] = int(round(self.scoring_instincts['Offensive consistency']))
+            
             self.passing['Passing IQ'] += (99 - self.passing['Passing IQ']) * actual_mental_growthRate
+            self.passing['Passing IQ'] = int(round(self.passing['Passing IQ']))
+
             self.team_defense['Pick and roll defense IQ'] += (99 - self.team_defense['Pick and roll defense IQ']) * actual_mental_growthRate
+            self.team_defense['Pick and roll defense IQ'] = int(round(self.team_defense['Pick and roll defense IQ']))
+            
             self.team_defense['Help defense IQ'] += (99 - self.team_defense['Help defense IQ']) * actual_mental_growthRate
-            self.team_defense['Defensive consistency'] += (99 - self.team_defense['Pick and roll defense IQ']) * actual_mental_growthRate
+            self.team_defense['Help defense IQ'] = int(round(self.team_defense['Help defense IQ']))
+
+            self.team_defense['Defensive consistency'] += (99 - self.team_defense['Defensive consistency']) * actual_mental_growthRate
+            self.team_defense['Defensive consistency'] = int(round(self.team_defense['Defensive consistency']))
+            
             self.athleticism['Strength'] += (99 - self.athleticism['Strength']) * (actual_physical_growthRate) 
+            self.athleticism['Strength'] = int(round(self.athleticism['Strength']))
+
             self.athleticism['Stamina'] += (99 - self.athleticism['Stamina']) * (actual_physical_growthRate) 
+            self.athleticism['Stamina'] = int(round(self.athleticism['Stamina']))
         else:
            False
 
     def coreSkills_grower(self):
-        #if self.years_pro_after20 <= 3:
-        coreSkill_checker_three = sum(self.threepoint_scoring.values())/len(self.threepoint_scoring)
+        #Define core player skills
+        attributes = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.lowpost_finesse.values()) + list(player1.lowpost_strong.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.onballD_post.values()) + list(player1.passing.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_blocking.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) #+ list(player1.threepoint_spotup.values())
+        
+        C_primary_skills = list(player1.close_scoring.values()) + list(player1.lowpost_finesse.values()) + list(player1.lowpost_strong.values()) + list(player1.onballD_post.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.shot_blocking.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.free_throw.values())
+        C_primary_skills.sort()
+        C_skill_len = len(C_primary_skills) 
+        C_primary_divider = round(C_skill_len/5)
+        C_eliteSkill_floor = C_primary_skills[-C_primary_divider]  #1st quartile
+        C_strongSkill_floor = C_primary_skills[-C_primary_divider * 2] #2nd quartile
+        C_avgSkill_floor = C_primary_skills[-C_primary_divider * 3] #3rd quartile ....
+        C_weakSkill_floor = C_primary_skills[-C_primary_divider * 4]
+        C_weakestSkill_floor = C_primary_skills[0]
 
-        print(coreSkill_checker_three) 
+        PF_primary_skills = list(player1.close_scoring.values()) + list(player1.driving_strong.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_post.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.free_throw.values())
+        PF_primary_skills.sort()
+        PF_skill_len = len(PF_primary_skills) 
+        PF_primary_divider = round(PF_skill_len/5)
+        PF_eliteSkill_floor = PF_primary_skills[-PF_primary_divider]  #1st quartile
+        PF_strongSkill_floor = PF_primary_skills[-PF_primary_divider * 2] #2nd quartile
+        PF_avgSkill_floor = PF_primary_skills[-PF_primary_divider * 3] #3rd quartile ....
+        PF_weakSkill_floor = PF_primary_skills[-PF_primary_divider * 4]
+        PF_weakestSkill_floor = PF_primary_skills[0]
+
+        SF_primary_skills = list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) + list(player1.threepoint_spotup.values())
+        SF_primary_skills.sort()
+        SF_skill_len = len(SF_primary_skills) 
+        SF_primary_divider = round(SF_skill_len/5)
+        SF_eliteSkill_floor = SF_primary_skills[-SF_primary_divider]  #1st quartile
+        SF_strongSkill_floor = SF_primary_skills[-SF_primary_divider * 2] #2nd quartile
+        SF_avgSkill_floor = SF_primary_skills[-SF_primary_divider * 3] #3rd quartile ....
+        SF_weakSkill_floor = SF_primary_skills[-SF_primary_divider * 4]
+        SF_weakestSkill_floor = SF_primary_skills[0]
+
+        SG_primary_skills = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.post_control.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.threepoint_creating.values()) + list(player1.threepoint_spotup.values())   
+        SG_primary_skills.sort()
+        SG_skill_len = len(SG_primary_skills) 
+        SG_primary_divider = round(SG_skill_len/5)
+        SG_eliteSkill_floor = SG_primary_skills[-SG_primary_divider]  #1st quartile
+        SG_strongSkill_floor = SG_primary_skills[-SG_primary_divider * 2] #2nd quartile
+        SG_avgSkill_floor = SG_primary_skills[-SG_primary_divider * 3] #3rd quartile ....
+        SG_weakSkill_floor = SG_primary_skills[-SG_primary_divider * 4]
+        SG_weakestSkill_floor = SG_primary_skills[0]
+
+        PG_primary_skills = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.free_throw.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.passing.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) + list(player1.threepoint_creating.values())
+        PG_primary_skills.sort()
+        PG_skill_len = len(PG_primary_skills) 
+        PG_primary_divider = round(PG_skill_len/5)
+        PG_eliteSkill_floor = PG_primary_skills[-PG_primary_divider]  #1st quartile
+        PG_strongSkill_floor = PG_primary_skills[-PG_primary_divider * 2] #2nd quartile
+        PG_avgSkill_floor = PG_primary_skills[-PG_primary_divider * 3] #3rd quartile ....
+        PG_weakSkill_floor = PG_primary_skills[-PG_primary_divider * 4]
+        PG_weakestSkill_floor = PG_primary_skills[0]
+
+
+        #Define growth rates for strengths, weaknesses etc.
         
-        
+        print(PG_primary_skills, PG_eliteSkill_floor, PG_strongSkill_floor, PG_avgSkill_floor, PG_weakSkill_floor, PG_weakestSkill_floor)
+        #print(SG_primary_skills, SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, SG_weakSkill_floor, SG_weakestSkill_floor)
+        #print(SF_primary_skills, SF_eliteSkill_floor, SF_strongSkill_floor, SF_avgSkill_floor, SF_weakSkill_floor, SF_weakestSkill_floor)
+        #print(PF_primary_skills, PF_eliteSkill_floor, PF_strongSkill_floor, PF_avgSkill_floor, PF_weakSkill_floor, PF_weakestSkill_floor)
+        #print(C_primary_skills, C_eliteSkill_floor, C_strongSkill_floor, C_avgSkill_floor, C_weakSkill_floor, C_weakestSkill_floor)
 
 #   1.2 --Create Instances of Player--
 
@@ -87,8 +160,11 @@ def measurement_function(height, weight, wingspan):
 def trait_function(talent, drive, mental_disc, phys_hard, phys_disc):
     return {'talent': talent, 'drive': drive, 'training discipline (mental)': mental_disc, 'physical hardiness': phys_hard, 'training discipline (physical)': phys_disc}
 
-def threepoint_scoring_function(open_3, offdribble_3, contested_3):
-    return {'Open shot 3pt': open_3, 'Off dribble shot 3pt': offdribble_3, 'Contested shot 3pt': contested_3}
+def threepoint_spotup_function(open_3):
+    return {'Open shot 3pt': open_3}
+
+def threepoint_create_function(offdribble_3, contested_3):
+    return {'Off dribble shot 3pt': offdribble_3, 'Contested shot 3pt': contested_3}
 
 def midrange_scoring_function(open_mid, offdribble_mid, contested_mid):
     return {'Open shot midrange': open_mid, 'Off dribble shot midrange': offdribble_mid, 'Contested shot midrange': contested_mid}
@@ -145,7 +221,7 @@ def lowpost_finesse_function(stand_layup, hook):
     return {'Standing layup': stand_layup, 'Post hook': hook}
 
 def highpost_function(post_fade):
-    return {'Post fadeaway':post_fade}
+    return {'Post fadeaway': post_fade}
 
 def athleticism_function(speed, accel, vert, strength, stamina, hustle, durability):
     return {'Speed': speed, 'Acceleration': accel, 'Vertical': vert, 'Strength': strength, 'Stamina':stamina, 'Hustle': hustle, 'Durability': durability}
@@ -238,7 +314,7 @@ def athleticism_function(speed, accel, vert, strength, stamina, hustle, durabili
 # player1 = Player(vital_function(vital_input_name, vital_input_age, vital_input_position), 
     # measurement_function(measurement_input_height, measurement_input_weight, measurement_input_wingspan), 
     # trait_function(trait_input_talent, trait_input_drive, trait_input_mentalDiscipline,trait_input_physHard,trait_input_physDisc), 
-    # threepoint_scoring_function(threepoint_input_scoring_open, threepoint_input_scoring_offDribble, threepoint_input_scoring_contested), 
+    # threepoint_spotup_function(threepoint_input_scoring_open, threepoint_input_scoring_offDribble, threepoint_input_scoring_contested), 
     # midrange_scoring_function(midrange_input_scoring_open, midrange_input_scoring_offDribble, midrange_input_scoring_contested),
     # closerange_scoring_function(close_input_scoring_open, close_input_scoring_offDribble, close_input_scoring_contested), 
     # scoring_instincts_function(scoring_instincts_input_shotIQ, scoring_instincts_input_drawFoul, scoring_instincts_input_offconsistency), 
@@ -253,9 +329,9 @@ def athleticism_function(speed, accel, vert, strength, stamina, hustle, durabili
     # athleticism_function(athleticism_input_speed, athleticism_input_accel, athleticism_input_vertical, athleticism_input_strength, athleticism_input_stamina, athleticism_input_hustle, athleticism_input_durable),0
     # )
 
-player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72, 160, 72), trait_function(99, 94, 45, 70, 73),threepoint_scoring_function(75, 76, 77), midrange_scoring_function(80, 82, 83), 
+player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72,160,72), trait_function(99, 94, 45, 70, 73), threepoint_spotup_function(70), threepoint_create_function(80, 82), midrange_scoring_function(80, 82, 83), 
     closerange_scoring_function(84, 87, 87), scoring_instincts_function(85, 72, 80), free_throw_function(70),driving_finesse_function(88), driving_strong_function(80),
-    onballD_perimeter_function(73, 86), onballD_post_function(25), team_defense_function(65, 70, 70), stealing_function(85, 87, 86),
+    onballD_perimeter_function(73, 86), onballD_post_function(25), team_defense_function(65,70,80), stealing_function(85, 87, 86),
     shot_defense_function(70), shot_blocking_function(45), rebounding_function(30, 40, 35), ball_handling_function(90 , 90), passing_function(75, 75, 60),
     post_control_function(40, 80), lowpost_strong_function(40, 35), lowpost_finesse_function(70, 40), highpost_function(50),
     athleticism_function(97, 98, 94, 50, 97, 95, 90), 0, 0)
@@ -265,7 +341,7 @@ player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function
 #2.---SIMULATE SEASONS---
 
 #print(f'On draft day {player1.vitals['Name']} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.skill_IQ['offensive awareness']))))
-print('On draft day ' + str(player1.vitals['Name']) + ' exists. He has ' + str(player1.athleticism['Strength']) + ' strength rating.')
+print('On draft day ' + str(player1.vitals['Name']) + 'is ' +str(player1.vitals['Age']) +' years old. He has ' + str(player1.nonteen_yearsPro) + ' non teenage years pro in the league.')
 
 
 season = 0
@@ -274,11 +350,10 @@ printcounter = 0
 while season <=10:
     
     if printcounter == 1:
-    #    print(f'After season {season}, {player1.vitals['Name']} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.skill_IQ['offensive awareness']))))
+    #   print(f'After season {season}, {player1.vitals['Name']} is {player1.age} years old, and his skill of offensive awareness is ' + str(int((player1.skill_IQ['offensive awareness']))))
         print('player age: ' + str(player1.vitals['Age']))
-        #print('player strength: ' + str(player1.athleticism['Strength']))
         player1.coreSkills_grower()
-        print('player Open 3: ' + str(player1.threepoint_scoring['Open shot 3pt']))
+        #print('Offensive consistency: ' + str(player1.scoring_instincts['Offensive consistency']))
         printcounter = 0
     
     player1.player_ager()
