@@ -140,12 +140,36 @@ class Player:
         PG_weakestSkill_floor = PG_primary_skills[0]
 
 
-        #Define growth rates for strengths, weaknesses etc.
+        #Define growth rates
+        raw_potential = player1.traits['talent']
+        discipline = player1.traits['training discipline (mental)']
+        drive = player1.traits['drive']
+        growth_rate = 2/3
         
+        potential_pool_initial = 12
+        potential_pool_elite = potential_pool_initial * raw_potential 
+        potential_pool_strong = potential_pool_initial * raw_potential * (drive * 1.25)
+        potential_pool_average = potential_pool_initial * raw_potential * (drive * 1.125)
+        potential_pool_weak = potential_pool_initial * raw_potential * drive
+        potential_pool_weakest = potential_pool_initial * raw_potential * drive
+
+        def SG_grower():
+            print(SG_primary_skills)
+
+        def PG_grower():
+            print(PG_primary_skills)
+
+
         if player1.vitals['Position'] == 'PG':
-            print(PG_primary_skills, PG_eliteSkill_floor, PG_strongSkill_floor, PG_avgSkill_floor, PG_weakSkill_floor, PG_weakestSkill_floor)
+            return PG_grower()
         elif player1.vitals['Position'] == 'SG':
-            print(SG_primary_skills, SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, SG_weakSkill_floor, SG_weakestSkill_floor)
+            return SG_grower() 
+
+
+
+           
+        
+
         #print(SF_primary_skills, SF_eliteSkill_floor, SF_strongSkill_floor, SF_avgSkill_floor, SF_weakSkill_floor, SF_weakestSkill_floor)
         #print(PF_primary_skills, PF_eliteSkill_floor, PF_strongSkill_floor, PF_avgSkill_floor, PF_weakSkill_floor, PF_weakestSkill_floor)
         #print(C_primary_skills, C_eliteSkill_floor, C_strongSkill_floor, C_avgSkill_floor, C_weakSkill_floor, C_weakestSkill_floor)
@@ -235,111 +259,111 @@ def athleticism_function(speed, accel, vert, strength, stamina, hustle, durabili
 #  1.2.2 --Create players--
 # 
 #Take user inputs
-vital_input_name = input('Enter your player\'s name: ')
-vital_input_age = int(input('Enter your player\'s age: '))
-vital_input_position = input('Enter your player\'s position: ')
-
-measurement_input_height = int(input('Enter your player\'s height: '))
-measurement_input_weight = int(input('Enter your player\'s weight: '))
-measurement_input_wingspan = int(input('Enter your player\'s wingspan: '))
-
-trait_input_talent = int(input('Enter your player\'s talent: '))
-trait_input_drive = int(input('Enter your player\'s drive: '))
-trait_input_mentalDiscipline = int(input('Enter your player\'s training discipline (mental): '))
-trait_input_physHard = int(input('Enter your player\'s physical hardiness: '))
-trait_input_physDisc = int(input('Enter your player\'s training discipline (physical): '))
-
-threepoint_input_scoring_open = int(input('Enter your player\'s Open Shot 3pt rating: '))
-threepoint_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot 3pt rating: '))
-threepoint_input_scoring_contested = int(input('Enter your player\'s Contested Shot 3pt rating: '))
-
-midrange_input_scoring_open = int(input('Enter your player\'s Open Shot Midrange rating: '))
-midrange_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot Midrange rating: '))
-midrange_input_scoring_contested = int(input('Enter your player\'s Contested Shot Midrange rating: '))
-
-close_input_scoring_open = int(input('Enter your player\'s Open Shot Close rating: '))
-close_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot Close rating: '))
-close_input_scoring_contested = int(input('Enter your player\'s Contested Shot Close rating: '))
-
-scoring_instincts_input_shotIQ = int(input('Enter your player\'s Shot IQ rating: '))
-scoring_instincts_input_drawFoul = int(input('Enter your player\'s draw foul rating: '))
-scoring_instincts_input_offconsistency = int(input ('Enter your player\'s offensive consistency rating: '))
-
-free_throw_input = int(input('Enter your player\'s free throw rating: '))
-
-driving_finesse_input_drivinglayup = int(input('Enter your player\'s driving layup rating: '))
-
-driving_strong_input_drivedunk = int(input('Enter your player\'s driving dunk rating: '))
-
-onballD_perimeter_input_IQ = int(input('Enter your player\'s on ball defense IQ rating: '))
-onballD_perimeter_input_latquick = int(input('Enter your player\'s lateral quickness rating: '))
-onballD_post_input = int(input('Enter your player\'s post defense rating: '))
-
-team_defense_input_PnR = int(input('Enter your player\'s pick and roll defense IQ rating: '))
-team_defense_input_help = int(input('Enter your player\'s help defense IQ rating: '))
-team_defense_input_consist = int(input('Enter your player\'s defensive consistency rating: '))
-
-steal_input_stl = int(input('Enter your player\'s steal rating: '))
-steal_input_passPercept = int(input('Enter your player\'s pass perception rating: '))
-steal_input_rxn = int(input('Enter your player\'s reaction time rating: '))
-shotContest_input = int(input('Enter your player\'s shot contest rating: '))
-shotBlock_input = int(input('Enter your player\'s shot block rating: '))
-
-rebounding_input_off = int(input('Enter your player\'s offensive rebounding rating: '))
-rebounding_input_def = int(input('Enter your player\'s defensive rebounding rating: '))
-rebounding_input_box = int(input('Enter your player\'s boxout rating: '))
-
-ball_handling_input_control = int(input('Enter your player\'s ball control rating: '))
-ball_handling_input_speed = int(input('Enter your player\'s speed with ball rating: '))
-
-passing_input_accuracy = int(input('Enter your player\'s passing accuracy rating: '))
-passing_input_IQ = int(input('Enter your player\'s passing IQ rating: '))
-passing_input_vision = int(input('Enter your player\'s passing vision rating: '))
-
-post_input_control = int(input('Enter your player\'s post control rating: '))
-post_input_hands = int(input('Enter your player\'s hands rating: '))
-
-lowpost_strong_input_standDunk = int(input('Enter your player\'s standing dunk rating: '))
-lowpost_strong_input_contactDunk = int(input('Enter your player\'s contact dunk rating: '))
-
-lowpost_finesse_input_standLayup = int(input('Enter your player\'s standing layup rating: '))
-lowpost_finesse_input_hook = int(input('Enter your player\'s post hook rating: '))
-
-highpost_finesse_input_fade = int(input('Enter your player\'s post fadeaway rating: '))
-
-athleticism_input_speed = int(input('Enter your player\'s speed rating: '))
-athleticism_input_accel = int(input('Enter your player\'s acceleration rating: '))
-athleticism_input_vertical = int(input('Enter your player\'s vertical rating: '))
-athleticism_input_strength = int(input('Enter your player\'s strength rating: '))
-athleticism_input_stamina = int(input('Enter your player\'s stamina rating: '))
-athleticism_input_hustle = int(input('Enter your player\'s hustle rating: '))
-athleticism_input_durable = int(input('Enter your player\'s durability rating: '))
-
+# vital_input_name = input('Enter your player\'s name: ')
+# vital_input_age = int(input('Enter your player\'s age: '))
+# vital_input_position = input('Enter your player\'s position: ')
+# 
+# measurement_input_height = int(input('Enter your player\'s height: '))
+# measurement_input_weight = int(input('Enter your player\'s weight: '))
+# measurement_input_wingspan = int(input('Enter your player\'s wingspan: '))
+# 
+# trait_input_talent = int(input('Enter your player\'s talent: '))
+# trait_input_drive = int(input('Enter your player\'s drive: '))
+# trait_input_mentalDiscipline = int(input('Enter your player\'s training discipline (mental): '))
+# trait_input_physHard = int(input('Enter your player\'s physical hardiness: '))
+# trait_input_physDisc = int(input('Enter your player\'s training discipline (physical): '))
+# 
+# threepoint_input_scoring_open = int(input('Enter your player\'s Open Shot 3pt rating: '))
+# threepoint_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot 3pt rating: '))
+# threepoint_input_scoring_contested = int(input('Enter your player\'s Contested Shot 3pt rating: '))
+# 
+# midrange_input_scoring_open = int(input('Enter your player\'s Open Shot Midrange rating: '))
+# midrange_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot Midrange rating: '))
+# midrange_input_scoring_contested = int(input('Enter your player\'s Contested Shot Midrange rating: '))
+# 
+# close_input_scoring_open = int(input('Enter your player\'s Open Shot Close rating: '))
+# close_input_scoring_offDribble = int(input('Enter your player\'s Off-dribble Shot Close rating: '))
+# close_input_scoring_contested = int(input('Enter your player\'s Contested Shot Close rating: '))
+# 
+# scoring_instincts_input_shotIQ = int(input('Enter your player\'s Shot IQ rating: '))
+# scoring_instincts_input_drawFoul = int(input('Enter your player\'s draw foul rating: '))
+# scoring_instincts_input_offconsistency = int(input ('Enter your player\'s offensive consistency rating: '))
+# 
+# free_throw_input = int(input('Enter your player\'s free throw rating: '))
+# 
+# driving_finesse_input_drivinglayup = int(input('Enter your player\'s driving layup rating: '))
+# 
+# driving_strong_input_drivedunk = int(input('Enter your player\'s driving dunk rating: '))
+# 
+# onballD_perimeter_input_IQ = int(input('Enter your player\'s on ball defense IQ rating: '))
+# onballD_perimeter_input_latquick = int(input('Enter your player\'s lateral quickness rating: '))
+# onballD_post_input = int(input('Enter your player\'s post defense rating: '))
+# 
+# team_defense_input_PnR = int(input('Enter your player\'s pick and roll defense IQ rating: '))
+# team_defense_input_help = int(input('Enter your player\'s help defense IQ rating: '))
+# team_defense_input_consist = int(input('Enter your player\'s defensive consistency rating: '))
+# 
+# steal_input_stl = int(input('Enter your player\'s steal rating: '))
+# steal_input_passPercept = int(input('Enter your player\'s pass perception rating: '))
+# steal_input_rxn = int(input('Enter your player\'s reaction time rating: '))
+# shotContest_input = int(input('Enter your player\'s shot contest rating: '))
+# shotBlock_input = int(input('Enter your player\'s shot block rating: '))
+# 
+# rebounding_input_off = int(input('Enter your player\'s offensive rebounding rating: '))
+# rebounding_input_def = int(input('Enter your player\'s defensive rebounding rating: '))
+# rebounding_input_box = int(input('Enter your player\'s boxout rating: '))
+# 
+# ball_handling_input_control = int(input('Enter your player\'s ball control rating: '))
+# ball_handling_input_speed = int(input('Enter your player\'s speed with ball rating: '))
+# 
+# passing_input_accuracy = int(input('Enter your player\'s passing accuracy rating: '))
+# passing_input_IQ = int(input('Enter your player\'s passing IQ rating: '))
+# passing_input_vision = int(input('Enter your player\'s passing vision rating: '))
+# 
+# post_input_control = int(input('Enter your player\'s post control rating: '))
+# post_input_hands = int(input('Enter your player\'s hands rating: '))
+# 
+# lowpost_strong_input_standDunk = int(input('Enter your player\'s standing dunk rating: '))
+# lowpost_strong_input_contactDunk = int(input('Enter your player\'s contact dunk rating: '))
+# 
+# lowpost_finesse_input_standLayup = int(input('Enter your player\'s standing layup rating: '))
+# lowpost_finesse_input_hook = int(input('Enter your player\'s post hook rating: '))
+# 
+# highpost_finesse_input_fade = int(input('Enter your player\'s post fadeaway rating: '))
+# 
+# athleticism_input_speed = int(input('Enter your player\'s speed rating: '))
+# athleticism_input_accel = int(input('Enter your player\'s acceleration rating: '))
+# athleticism_input_vertical = int(input('Enter your player\'s vertical rating: '))
+# athleticism_input_strength = int(input('Enter your player\'s strength rating: '))
+# athleticism_input_stamina = int(input('Enter your player\'s stamina rating: '))
+# athleticism_input_hustle = int(input('Enter your player\'s hustle rating: '))
+# athleticism_input_durable = int(input('Enter your player\'s durability rating: '))
+# 
 #Create player
-player1 = Player(vital_function(vital_input_name, vital_input_age, vital_input_position),
-    measurement_function(measurement_input_height, measurement_input_weight, measurement_input_wingspan), 
-    trait_function(trait_input_talent, trait_input_drive, trait_input_mentalDiscipline,trait_input_physHard,trait_input_physDisc), 
-    threepoint_spotup_function(threepoint_input_scoring_open), threepoint_create_function(threepoint_input_scoring_offDribble, threepoint_input_scoring_contested),
-    midrange_scoring_function(midrange_input_scoring_open, midrange_input_scoring_offDribble, midrange_input_scoring_contested),
-    closerange_scoring_function(close_input_scoring_open, close_input_scoring_offDribble, close_input_scoring_contested), 
-    scoring_instincts_function(scoring_instincts_input_shotIQ, scoring_instincts_input_drawFoul, scoring_instincts_input_offconsistency), 
-    free_throw_function(free_throw_input), driving_finesse_function(driving_finesse_input_drivinglayup),
-    driving_strong_function(driving_strong_input_drivedunk), onballD_perimeter_function(onballD_perimeter_input_IQ, onballD_perimeter_input_latquick),
-    onballD_post_function(onballD_post_input), team_defense_function(team_defense_input_PnR, team_defense_input_help, team_defense_input_consist),
-    stealing_function(steal_input_stl, steal_input_passPercept, steal_input_rxn), shot_defense_function(shotContest_input),
-    shot_blocking_function(shotBlock_input), rebounding_function(rebounding_input_off,rebounding_input_def, rebounding_input_box),
-    ball_handling_function(ball_handling_input_control, ball_handling_input_speed), passing_function(passing_input_accuracy, passing_input_IQ, passing_input_vision),
-    post_control_function(post_input_control, post_input_hands), lowpost_strong_function(lowpost_strong_input_standDunk, lowpost_strong_input_contactDunk),
-    lowpost_finesse_function(lowpost_finesse_input_standLayup, lowpost_finesse_input_hook), highpost_function(highpost_finesse_input_fade), 
-    athleticism_function(athleticism_input_speed, athleticism_input_accel, athleticism_input_vertical, athleticism_input_strength, athleticism_input_stamina, athleticism_input_hustle, athleticism_input_durable),0,0
-    )
+# player1 = Player(vital_function(vital_input_name, vital_input_age, vital_input_position),
+    # measurement_function(measurement_input_height, measurement_input_weight, measurement_input_wingspan), 
+    # trait_function(trait_input_talent, trait_input_drive, trait_input_mentalDiscipline,trait_input_physHard,trait_input_physDisc), 
+    # threepoint_spotup_function(threepoint_input_scoring_open), threepoint_create_function(threepoint_input_scoring_offDribble, threepoint_input_scoring_contested),
+    # midrange_scoring_function(midrange_input_scoring_open, midrange_input_scoring_offDribble, midrange_input_scoring_contested),
+    # closerange_scoring_function(close_input_scoring_open, close_input_scoring_offDribble, close_input_scoring_contested), 
+    # scoring_instincts_function(scoring_instincts_input_shotIQ, scoring_instincts_input_drawFoul, scoring_instincts_input_offconsistency), 
+    # free_throw_function(free_throw_input), driving_finesse_function(driving_finesse_input_drivinglayup),
+    # driving_strong_function(driving_strong_input_drivedunk), onballD_perimeter_function(onballD_perimeter_input_IQ, onballD_perimeter_input_latquick),
+    # onballD_post_function(onballD_post_input), team_defense_function(team_defense_input_PnR, team_defense_input_help, team_defense_input_consist),
+    # stealing_function(steal_input_stl, steal_input_passPercept, steal_input_rxn), shot_defense_function(shotContest_input),
+    # shot_blocking_function(shotBlock_input), rebounding_function(rebounding_input_off,rebounding_input_def, rebounding_input_box),
+    # ball_handling_function(ball_handling_input_control, ball_handling_input_speed), passing_function(passing_input_accuracy, passing_input_IQ, passing_input_vision),
+    # post_control_function(post_input_control, post_input_hands), lowpost_strong_function(lowpost_strong_input_standDunk, lowpost_strong_input_contactDunk),
+    # lowpost_finesse_function(lowpost_finesse_input_standLayup, lowpost_finesse_input_hook), highpost_function(highpost_finesse_input_fade), 
+    # athleticism_function(athleticism_input_speed, athleticism_input_accel, athleticism_input_vertical, athleticism_input_strength, athleticism_input_stamina, athleticism_input_hustle, athleticism_input_durable),0,0
+    # )
 
-#player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72,160,72), trait_function(99, 94, 45, 70, 73), threepoint_spotup_function(70), threepoint_create_function(80, 82), midrange_scoring_function(80, 82, 83), 
-#    closerange_scoring_function(84, 87, 87), scoring_instincts_function(85, 72, 80), free_throw_function(70),driving_finesse_function(88), driving_strong_function(80),
-#    onballD_perimeter_function(73, 86), onballD_post_function(25), team_defense_function(65,70,80), stealing_function(85, 87, 86),
-#    shot_defense_function(70), shot_blocking_function(45), rebounding_function(30, 40, 35), ball_handling_function(90 , 90), passing_function(75, 75, 60),
-#    post_control_function(40, 80), lowpost_strong_function(40, 35), lowpost_finesse_function(70, 40), highpost_function(50),
-#    athleticism_function(97, 98, 94, 50, 97, 95, 90), 0, 0)
+player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72,160,72), trait_function(99, 94, 45, 70, 73), threepoint_spotup_function(70), threepoint_create_function(80, 82), midrange_scoring_function(80, 82, 83), 
+   closerange_scoring_function(84, 87, 87), scoring_instincts_function(85, 72, 80), free_throw_function(70),driving_finesse_function(88), driving_strong_function(80),
+   onballD_perimeter_function(73, 86), onballD_post_function(25), team_defense_function(65,70,80), stealing_function(85, 87, 86),
+   shot_defense_function(70), shot_blocking_function(45), rebounding_function(30, 40, 35), ball_handling_function(90 , 90), passing_function(75, 75, 60),
+   post_control_function(40, 80), lowpost_strong_function(40, 35), lowpost_finesse_function(70, 40), highpost_function(50),
+   athleticism_function(97, 98, 94, 50, 97, 95, 90), 0, 0)
 
 
 
