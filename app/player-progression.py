@@ -84,9 +84,10 @@ class Player:
             self.athleticism['Stamina'] = int(round(self.athleticism['Stamina']))
         else:
            False
+           
 
     def coreSkills_grower(self):
-        #Define core player skills
+        #Divide core skills into quartiles
         attributes = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.lowpost_finesse.values()) + list(player1.lowpost_strong.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.onballD_post.values()) + list(player1.passing.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_blocking.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) #+ list(player1.threepoint_spotup.values())
         
         C_primary_skills = list(player1.close_scoring.values()) + list(player1.lowpost_finesse.values()) + list(player1.lowpost_strong.values()) + list(player1.onballD_post.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.shot_blocking.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.free_throw.values())
@@ -140,21 +141,63 @@ class Player:
         PG_weakestSkill_floor = PG_primary_skills[0]
 
 
-        #Define growth rates
+        #Apply growth
         raw_potential = player1.traits['talent']
         discipline = player1.traits['training discipline (mental)']
         drive = player1.traits['drive']
         growth_rate = 2/3
+
+        def drive_modifier(a, m):
+            output = a * m
+            if output <= 0.99:
+                return output
+            else:
+                return 0.99 
         
         potential_pool_initial = 12
         potential_pool_elite = potential_pool_initial * raw_potential 
-        potential_pool_strong = potential_pool_initial * raw_potential * (drive * 1.25)
-        potential_pool_average = potential_pool_initial * raw_potential * (drive * 1.125)
+        potential_pool_strong = potential_pool_initial * raw_potential * drive_modifier(drive, 1.25)
+        potential_pool_average = potential_pool_initial * raw_potential * drive_modifier(drive, 1.125)
         potential_pool_weak = potential_pool_initial * raw_potential * drive
         potential_pool_weakest = potential_pool_initial * raw_potential * drive
+            
+        potential_pool_initial_plus90 = 9
+        potential_pool_elite_plus90 = potential_pool_initial_plus90 * raw_potential 
+        potential_pool_strong_plus90 = potential_pool_initial_plus90 * raw_potential * drive_modifier(drive, 1.25)
+        potential_pool_average_plus90 = potential_pool_initial_plus90 * raw_potential * drive_modifier(drive, 1.125)
+        potential_pool_weak_plus90 = potential_pool_initial_plus90 * raw_potential * drive
+        potential_pool_weakest_plus90 = potential_pool_initial_plus90 * raw_potential * drive
+
 
         def SG_grower():
-            print(SG_primary_skills)
+            SG_ballhandle_initial = 81#player1.ball_handling['Ball control']
+            annual_growth_ceiling = 0
+            potential_pool_final = 0
+    
+            if SG_ballhandle_initial >= SG_eliteSkill_floor:
+                if SG_ballhandle_initial < 90:
+                    potential_pool = potential_pool_elite
+                elif SG_ballhandle_initial >= 90:
+                    potential_pool = potential_pool_elite_plus90
+            elif SG_ballhandle_initial >= SG_strongSkill_floor and SG_ballhandle_initial < SG_eliteSkill_floor:
+                if SG_ballhandle_initial < 90:
+                    potential_pool = potential_pool_strong
+                elif SG_ballhandle_initial >= 90:
+                    potential_pool = potential_pool_strong_plus90
+            elif SG_ballhandle_initial >= SG_avgSkill_floor and SG_ballhandle_initial < SG_strongSkill_floor:
+                if SG_ballhandle_initial < 90:
+                    potential_pool = potential_pool_average
+                elif SG_ballhandle_initial >= 90:
+                    potential_pool = potential_pool_average_plus90
+            #elif SG_ballhandle_initial >= SG_weakS_floor and SG_ballhandle_initial < SG_strongSkill_floor:
+            #    if SG_ballhandle_initial < 90:
+            #        potential_pool = potential_pool_elite
+            #    elif SG_ballhandle_initial >= 90:
+            #        potential_pool = potential_pool_elite_plus90
+            print(SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, SG_ballhandle_initial, potential_pool, drive)
+
+        
+
 
         def PG_grower():
             print(PG_primary_skills)
@@ -184,7 +227,7 @@ def measurement_function(height, weight, wingspan):
     return {'Height (inches)': height, 'Weight':weight, 'Wingspan': wingspan}
 
 def trait_function(talent, drive, mental_disc, phys_hard, phys_disc):
-    return {'talent': talent, 'drive': drive, 'training discipline (mental)': mental_disc, 'physical hardiness': phys_hard, 'training discipline (physical)': phys_disc}
+    return {'talent': talent * 0.01 , 'drive': drive * 0.01, 'training discipline (mental)': mental_disc * 0.01, 'physical hardiness': phys_hard * 0.01, 'training discipline (physical)': phys_disc * 0.1}
 
 def threepoint_spotup_function(open_3):
     return {'Open shot 3pt': open_3}
