@@ -142,10 +142,10 @@ class Player:
 
         def SG_grower():
             #Core Skills of SG
-            SG_core_skills = [self.ball_handling, self.close_scoring]
+            SG_core_skills = [self.ball_handling['Ball control'], self.ball_handling['Speed with ball'], self.close_scoring['Open shot closerange'], self.close_scoring['Off dribble shot closerange'], self.close_scoring['Contested shot closerange'], self.driving_finesse['Driving layup'], self.driving_strong['Driving dunk'], self.free_throw['Free throw'], self.highpost['Post fadeaway'], self.midrange_scoring['Open shot midrange'], self.midrange_scoring['Off dribble shot midrange'], self.midrange_scoring['Contested shot midrange'], self.onballD_perimeter['On ball defense IQ'], self.onballD_perimeter['Lateral quickness'], self.post_control['Post control'], self.post_control['Hands'], self.scoring_instincts['Shot IQ'], self.scoring_instincts['Draw foul'], self.scoring_instincts['Offensive consistency'], self.shot_defense['Shot contest'], player1.team_defense['Pick and roll defense IQ'], player1.team_defense['Help defense IQ'], player1.team_defense['Defensive consistency'], player1.threepoint_creating['Off dribble shot 3pt'], player1.threepoint_creating['Contested shot 3pt'], player1.threepoint_spotup['Open shot 3pt']]
             
             #Discern cutoffs for skill buckets
-            SG_core_ratings = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.post_control.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.threepoint_creating.values()) + list(player1.threepoint_spotup.values())   
+            SG_core_ratings = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.post_control.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.team_defense.values()) + list(player1.threepoint_creating.values()) + list(player1.threepoint_spotup.values())
             SG_core_ratings.sort()
             SG_skill_len = len(SG_core_ratings) 
             SG_primary_divider = round(SG_skill_len/5)
@@ -160,7 +160,7 @@ class Player:
             SG_annual_growth_ceiling = 0
             SG_potential_pool_initial = 0
         
-            if SG_ballhandle_initial >= SG_eliteSkill_floor:
+            if SG_ballhandle_initial >= SG_eliteSkill_floor:   #**Problem: Need to replicate in a loop somehow
                 if SG_ballhandle_initial < 90:
                     potential_pool = potential_pool_elite
                 elif SG_ballhandle_initial >= 90:
@@ -187,7 +187,7 @@ class Player:
             #Apply growth
             annual_growth_ceiling = potential_pool * growth_rate
             annual_growth_actual = annual_growth_ceiling * discipline
-            potential_pool -= annual_growth_actual #***Problem: not decrementing***
+            potential_pool -= annual_growth_actual #**Problem: not decrementing
             self.ball_handling['Ball control'] += annual_growth_actual
 
             print(SG_core_skills)     
