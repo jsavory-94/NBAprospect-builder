@@ -93,8 +93,7 @@ class Player:
 
     #**Grow core skills of player**
     def coreSkills_grower(self):
-    #---Declare Master Variables for Growth Equation---
-
+    #---Define Core Growth Variables---
         #Player Traits
         attributes = list(player1.ball_handling.values()) + list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.lowpost_finesse.values()) + list(player1.lowpost_strong.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.onballD_post.values()) + list(player1.passing.values()) + list(player1.post_control.values()) + list(player1.rebounding.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_blocking.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) #+ list(player1.threepoint_spotup.values())
         raw_potential = player1.traits['talent']
@@ -102,7 +101,7 @@ class Player:
         drive = player1.traits['drive']
         growth_rate = 2/3
 
-        #Logic to adjust potential for each skill bucket 
+        #Logic to adjust potential pool for each skill bucket 
         def drive_modifier(a, m):
             output = a * m
             if output <= 0.99:
@@ -125,7 +124,7 @@ class Player:
         potential_pool_weakest_plus90 = potential_pool_initial_plus90 * raw_potential * drive
 
 
-        #---Apply Positional Logic---
+        #---Apply Growth by position---
 
         def PG_grower():
             #Discern cutoffs for skill buckets
@@ -141,6 +140,7 @@ class Player:
 
 
         def SG_grower():
+        #---Define SG Growth Variables---
             #Core Skills of SG
             SG_core_skills = [self.ball_handling['Ball control'], self.ball_handling['Speed with ball'], self.close_scoring['Open shot closerange'], self.close_scoring['Off dribble shot closerange'], self.close_scoring['Contested shot closerange'], self.driving_finesse['Driving layup'], self.driving_strong['Driving dunk'], self.free_throw['Free throw'], self.highpost['Post fadeaway'], self.midrange_scoring['Open shot midrange'], self.midrange_scoring['Off dribble shot midrange'], self.midrange_scoring['Contested shot midrange'], self.onballD_perimeter['On ball defense IQ'], self.onballD_perimeter['Lateral quickness'], self.post_control['Post control'], self.post_control['Hands'], self.scoring_instincts['Shot IQ'], self.scoring_instincts['Draw foul'], self.scoring_instincts['Offensive consistency'], self.shot_defense['Shot contest'], player1.team_defense['Pick and roll defense IQ'], player1.team_defense['Help defense IQ'], player1.team_defense['Defensive consistency'], player1.threepoint_creating['Off dribble shot 3pt'], player1.threepoint_creating['Contested shot 3pt'], player1.threepoint_spotup['Open shot 3pt']]
             
@@ -155,44 +155,45 @@ class Player:
             SG_weakSkill_floor = SG_core_ratings[-SG_primary_divider * 4]
             SG_weakestSkill_floor = SG_core_ratings[0]
 
-            #Logic to apply appropriate potential value to each skill bucket 
-            SG_ballhandle_initial = SG_core_ratings[0]
-            SG_annual_growth_ceiling = 0
-            SG_potential_pool_initial = 0
+            #Logic determining potential, annual growth 
+            iterator_limit = len(SG_core_skills) - 1
+            iterator = 0
+
+            while iterator <= iterator_limit:
+                SG_annual_growth_ceiling = 0
+                SG_potential_pool_initial = 0
+                attribute = SG_core_skills[iterator]
         
-            if SG_ballhandle_initial >= SG_eliteSkill_floor:   #**Problem: Need to replicate in a loop somehow
-                if SG_ballhandle_initial < 90:
-                    potential_pool = potential_pool_elite
-                elif SG_ballhandle_initial >= 90:
-                    potential_pool = potential_pool_elite_plus90
-            elif SG_ballhandle_initial >= SG_strongSkill_floor and SG_ballhandle_initial < SG_eliteSkill_floor:
-                if SG_ballhandle_initial < 90:
-                    potential_pool = potential_pool_strong
-                elif SG_ballhandle_initial >= 90:
-                    potential_pool = potential_pool_strong_plus90
-            elif SG_ballhandle_initial >= SG_avgSkill_floor and SG_ballhandle_initial < SG_strongSkill_floor:
-                if SG_ballhandle_initial < 90:
-                    potential_pool = potential_pool_average
-                elif SG_ballhandle_initial >= 90:
-                    potential_pool = potential_pool_average_plus90
-            elif SG_ballhandle_initial >= SG_weakSkill_floor and SG_ballhandle_initial < SG_avgSkill_floor:
-                if SG_ballhandle_initial < 90:
-                    potential_pool = potential_pool_weak
-                elif SG_ballhandle_initial >= 90:
-                    potential_pool = potential_pool_weak_plus90
-            elif SG_ballhandle_initial < SG_weakSkill_floor:
-                if SG_ballhandle_initial < 90:
-                    potential_pool = potential_pool_weakest
+                if attribute >= SG_eliteSkill_floor:  
+                    if attribute < 90:
+                        potential_pool = potential_pool_elite
+                    elif attribute >= 90:
+                        potential_pool = potential_pool_elite_plus90
+                elif attribute >= SG_strongSkill_floor and attribute < SG_eliteSkill_floor:
+                    if attribute < 90:
+                        potential_pool = potential_pool_strong
+                    elif attribute >= 90:
+                        potential_pool = potential_pool_strong_plus90
+                elif attribute >= SG_avgSkill_floor and attribute < SG_strongSkill_floor:
+                    if attribute < 90:
+                        potential_pool = potential_pool_average
+                    elif attribute >= 90:
+                        potential_pool = potential_pool_average_plus90
+                elif attribute >= SG_weakSkill_floor and attribute < SG_avgSkill_floor:
+                    if attribute < 90:
+                        potential_pool = potential_pool_weak
+                    elif attribute >= 90:
+                        potential_pool = potential_pool_weak_plus90
+                elif attribute < SG_weakSkill_floor:
+                    if attribute < 90:
+                        potential_pool = potential_pool_weakest
 
-            #Apply growth
-            annual_growth_ceiling = potential_pool * growth_rate
-            annual_growth_actual = annual_growth_ceiling * discipline
-            potential_pool -= annual_growth_actual #**Problem: not decrementing
-            self.ball_handling['Ball control'] += annual_growth_actual
-
-            print(SG_core_skills)     
+                iterator += 1
+                annual_growth_ceiling = potential_pool * growth_rate
+                annual_growth_actual = annual_growth_ceiling * discipline
+                print(attribute, potential_pool, annual_growth_ceiling, annual_growth_actual)     
             
-            #print(SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, SG_ballhandle_initial, potential_pool, SG_ballhandle_initial + potential_pool)
+            #print(SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, attribute, potential_pool, SG_ballhandle_initial + potential_pool)
     
         def SF_grower():
             SF_primary_skills = list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) + list(player1.threepoint_spotup.values())
@@ -433,7 +434,7 @@ def athleticism_function(speed, accel, vert, strength, stamina, hustle, durabili
     # athleticism_function(athleticism_input_speed, athleticism_input_accel, athleticism_input_vertical, athleticism_input_strength, athleticism_input_stamina, athleticism_input_hustle, athleticism_input_durable),0,0
     # )
 
-player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72,160,72), trait_function(99, 94, 45, 70, 73), threepoint_spotup_function(70), threepoint_create_function(80, 82), midrange_scoring_function(80, 82, 83), 
+player1 = Player(vital_function('Allen Iverson', 18, 'SG'), measurement_function(72,160,72), trait_function(99, 45, 45, 70, 73), threepoint_spotup_function(70), threepoint_create_function(80, 82), midrange_scoring_function(80, 82, 83), 
    closerange_scoring_function(84, 87, 87), scoring_instincts_function(85, 72, 80), free_throw_function(70),driving_finesse_function(88), driving_strong_function(80),
    onballD_perimeter_function(73, 86), onballD_post_function(25), team_defense_function(65,70,80), stealing_function(85, 87, 86),
    shot_defense_function(70), shot_blocking_function(45), rebounding_function(30, 40, 35), ball_handling_function(90 , 90), passing_function(75, 75, 60),
