@@ -152,18 +152,13 @@ class Player:
             SG_eliteSkill_floor = SG_core_ratings[-SG_primary_divider]  #1st quartile
             SG_strongSkill_floor = SG_core_ratings[-SG_primary_divider * 2] #2nd quartile
             SG_avgSkill_floor = SG_core_ratings[-SG_primary_divider * 3] #3rd quartile ....
-            SG_weakSkill_floor = SG_core_ratings[-SG_primary_divider * 4]
+            SG_weakSkill_floor = SG_core_ratings[-SG_primary_divider * 4] 
             SG_weakestSkill_floor = SG_core_ratings[0]
 
-            #Logic determining potential, annual growth 
-            iterator_limit = len(SG_core_skills) - 1
-            iterator = 0
-
-            while iterator <= iterator_limit:
-                SG_annual_growth_ceiling = 0
-                SG_potential_pool_initial = 0
-                attribute = SG_core_skills[iterator]
-        
+            def growth_logic(attribute):
+                #Logic determining potential, annual growth 
+                potential_pool = 0     
+                 
                 if attribute >= SG_eliteSkill_floor:  
                     if attribute < 90:
                         potential_pool = potential_pool_elite
@@ -187,14 +182,21 @@ class Player:
                 elif attribute < SG_weakSkill_floor:
                     if attribute < 90:
                         potential_pool = potential_pool_weakest
-
-                iterator += 1
+                        
                 annual_growth_ceiling = potential_pool * growth_rate
                 annual_growth_actual = annual_growth_ceiling * discipline
-                print(attribute, potential_pool, annual_growth_ceiling, annual_growth_actual)     
-            
-            #print(SG_eliteSkill_floor, SG_strongSkill_floor, SG_avgSkill_floor, attribute, potential_pool, SG_ballhandle_initial + potential_pool)
-    
+                attribute += annual_growth_actual
+                
+                return attribute
+
+            #---Apply SG Annual Growth---
+            if self.vitals['Age'] > 20 and self.nonteen_yearsPro <= 3:
+                SG_core_skills = list(map(growth_logic, SG_core_skills))
+            else:
+                False
+
+            print(SG_core_skills, self.ball_handling['Ball control'])
+
         def SF_grower():
             SF_primary_skills = list(player1.close_scoring.values()) + list(player1.driving_finesse.values()) + list(player1.driving_strong.values()) + list(player1.free_throw.values()) + list(player1.highpost.values()) + list(player1.midrange_scoring.values()) + list(player1.onballD_perimeter.values()) + list(player1.scoring_instincts.values()) + list(player1.shot_defense.values()) + list(player1.stealing.values()) + list(player1.team_defense.values()) + list(player1.threepoint_spotup.values())
             SF_primary_skills.sort()
